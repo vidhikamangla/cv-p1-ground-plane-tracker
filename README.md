@@ -203,6 +203,62 @@ Ground-plane tracking buys one thing image-space tracking cannot give at all: pl
 
 Median player speed lands at **1.6-2.2 m/s**, the right order for volleyball, and that is the sanity check this project leans on - a tracker whose metric output is physically implausible is wrong no matter what HOTA says. The max saturates the 11 m/s physical clip, i.e. a handful of foot-point outliers are being clipped rather than smoothed; filtering box scale as part of the state is in `later.md` for exactly that reason.
 
+### How much of this is tuning? (sensitivity sweep)
+
+A tracking number is only worth reading if you know how sharp its optimum is. Sweeping the
+two Kalman priors over a plausible range gives **HOTA from 15.7 to 31.6 — a
+15.9-point swing** on the same code and the same detections:
+
+![HOTA sensitivity to the Kalman priors](outputs/figures/sensitivity.png)
+
+Two things follow. First, the configuration used for the ground rows in the table above
+(`accel_std` 40, `meas_std` 0.35 → 31.24) sits essentially at the grid optimum
+(31.62), so those rows are not being flattered by a lucky setting. Second, the ridge
+runs towards *high* process noise: the optimum is at 40–80 m/s², more than ten times a
+human's real peak acceleration. That is the same finding the ablation table hints at, made
+explicit — the ground-plane filter is being forced to distrust its own motion model
+because the foot-point measurement carries errors that are not on the plane.
+
+### Cross-camera re-identification, and why zero-shot features fail at it
+
+`src/reid/` implements the appearance half of a cross-camera system: best-crop selection,
+DINOv2 embeddings, track-level aggregation, and a FAISS index. Evaluated on
+**Market-1501** with the standard protocol (same-identity-same-camera gallery images
+removed as junk, distractor identity −1 removed):
+
+| gallery | Rank-1 | Rank-5 | mAP |
+|---|---|---|---|
+| single-shot (19,732 vectors) | 5.05 | 10.72 | 1.66 |
+| aggregated per (identity, camera) (3,366 vectors) | 6.38 | 13.03 | **4.03** |
+
+Those numbers are bad, and the diagnostic is the interesting part:
+
+- **Rank-1 without junk removal is 91.1%**, and **97.9% of top-1 matches come from the
+  same camera as the query.**
+
+So the embeddings are not broken — they are extremely good at "same person, same camera"
+and nearly useless at "same person, different camera". A self-supervised ImageNet-scale
+feature encodes viewpoint, background and lighting at least as strongly as identity, and
+a camera change moves all three at once. This is the cleanest demonstration I can give of
+*why* re-ID is trained with identity and triplet losses rather than used off the shelf:
+the entire job of that training is to make the representation invariant to exactly the
+nuisance factors these features are dominated by.
+
+Two further checks, both reported because they did not work:
+
+- **Aggregating** several views of an identity into one vector helps, and helps mAP more
+  than Rank-1 (1.66 → 4.03),
+  which is what you would expect if the problem is variance rather than bias. It is the
+  same operation `best_crop.aggregate` performs on a track's best K crops.
+- **Preserving the 1:2 crop aspect ratio made it worse**, not better
+  (Rank-1 3.09 vs 5.05), so the
+  square-resize was not the confound. DINOv2's position embeddings are interpolated from a
+  square 518px grid and evidently do not transfer well to a 2:1 input.
+
+FAISS over the 19,732-vector gallery answers a query in
+0.045 ms, i.e. indexing is not the bottleneck — the
+representation is.
+
 ## Verification
 
 | check | why it matters |
