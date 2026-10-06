@@ -1,0 +1,26 @@
+{
+  "model": "vit_small_patch14_reg4_dinov2.lvd142m",
+  "dim": 384,
+  "single_shot": {
+    "Rank-1": 5.04750593824228,
+    "Rank-5": 10.71852731591449,
+    "Rank-10": 14.370546318289787,
+    "mAP": 1.6551267208766607,
+    "n_queries": 3368
+  },
+  "multi_shot_aggregated": {
+    "Rank-1": 6.383610451306414,
+    "Rank-5": 13.034441805225653,
+    "Rank-10": 16.538004750593824,
+    "mAP": 4.028278430569827,
+    "n_queries": 3368
+  },
+  "gallery_size_single": 19732,
+  "gallery_size_aggregated": 3366,
+  "faiss": {
+    "index": "IndexFlatIP",
+    "n_vectors": 19732,
+    "query_ms_total": 150.26,
+    "query_ms_per_query": 0.0446
+  }
+}
