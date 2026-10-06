@@ -237,8 +237,9 @@ Those numbers are bad, and the diagnostic is the interesting part:
   same camera as the query.**
 
 So the embeddings are not broken — they are extremely good at "same person, same camera"
-and nearly useless at "same person, different camera". A self-supervised ImageNet-scale
-feature encodes viewpoint, background and lighting at least as strongly as identity, and
+and nearly useless at "same person, different camera". A self-supervised feature trained on
+web-scale images (LVD-142M) encodes viewpoint, background and lighting at least as
+strongly as identity, and
 a camera change moves all three at once. This is the cleanest demonstration I can give of
 *why* re-ID is trained with identity and triplet losses rather than used off the shelf:
 the entire job of that training is to make the representation invariant to exactly the
