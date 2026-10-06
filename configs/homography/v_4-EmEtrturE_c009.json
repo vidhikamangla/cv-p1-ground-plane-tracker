@@ -1,0 +1,49 @@
+{
+  "ref_frame": 1,
+  "court": "volleyball",
+  "variant": "fivb",
+  "landmarks": [
+    "end_far_far_side",
+    "end_far_near_side",
+    "attack_far_far_side",
+    "attack_far_near_side"
+  ],
+  "img_pts": [
+    [
+      892.0,
+      395.0
+    ],
+    [
+      985.0,
+      523.0
+    ],
+    [
+      473.0,
+      326.0
+    ],
+    [
+      548.0,
+      548.0
+    ]
+  ],
+  "world_pts": [
+    [
+      18.0,
+      0.0
+    ],
+    [
+      18.0,
+      9.0
+    ],
+    [
+      12.0,
+      0.0
+    ],
+    [
+      12.0,
+      9.0
+    ]
+  ],
+  "reprojection_mean_m": 6.2849064536560244e-15,
+  "reprojection_max_m": 8.881784197001252e-15
+}

@@ -1,0 +1,18 @@
+{
+  "_comment": "FIVB volleyball court, 18 x 9 m. Origin at (end line of the near half) x (far sideline). x runs along the court length: 0 = near end line, 9 = centre line under the net, 18 = far end line. y runs across the width: 0 = far sideline, 9 = near sideline. Attack lines are 3 m from the centre line, i.e. x = 6 and x = 12.",
+  "fivb": {
+    "length": 18.0, "width": 9.0,
+    "landmarks": {
+      "end_near_far_side":     [0.0,  0.0],
+      "end_near_near_side":    [0.0,  9.0],
+      "attack_near_far_side":  [6.0,  0.0],
+      "attack_near_near_side": [6.0,  9.0],
+      "centre_far_side":       [9.0,  0.0],
+      "centre_near_side":      [9.0,  9.0],
+      "attack_far_far_side":   [12.0, 0.0],
+      "attack_far_near_side":  [12.0, 9.0],
+      "end_far_far_side":      [18.0, 0.0],
+      "end_far_near_side":     [18.0, 9.0]
+    }
+  }
+}

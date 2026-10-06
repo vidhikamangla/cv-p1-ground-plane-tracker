@@ -1,0 +1,11 @@
+# T0 - SORT-like floor: image space, IoU cost, single-stage, no CMC, no appearance.
+_base: ../default.yaml
+run_name: t0_image_iou_sort
+tracker: {space: image, cost: iou, use_cmc: false, use_color: false, two_stage: false}
+kalman:
+  # Pixel-space equivalents of the physical priors. The court spans ~18 m over
+  # ~700 px here (~39 px/m), so 3 m/s^2 -> ~250 px/s^2 and 0.35 m -> ~14 px.
+  # Having to do this conversion AT ALL - and having it be valid only for one
+  # depth in the frame - is the argument the ground-plane rows are making.
+  accel_std: 250.0
+  meas_std: 20.0

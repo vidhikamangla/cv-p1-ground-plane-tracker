@@ -1,0 +1,15 @@
+# Core
+torch>=2.5
+torchvision
+ultralytics==8.4.147        # detector weights only (AGPL-3.0 - see README)
+opencv-python-headless>=4.11
+numpy>=2.0
+scipy>=1.14                 # linear_sum_assignment (Hungarian)
+pyyaml
+tqdm
+pandas
+matplotlib
+imageio                     # GIF for the README
+pytest
+# TrackEval is cloned, not pip-installed: the PyPI copies are stale and differ on HOTA.
+# scripts/get_trackeval.sh pins a commit and patches it for numpy 2.

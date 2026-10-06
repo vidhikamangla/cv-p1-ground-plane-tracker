@@ -1,0 +1,57 @@
+# Single source of truth. Every script reads this; ablations override keys via --set.
+run_name: baseline
+
+paths:
+  # Per-sequence paths are templated on {seq} and filled by scripts/run_ablations.sh
+  frames_root:  /home/arnav/vidhika/vidhika/_data/sportsmot/val
+  data_root:    /home/arnav/vidhika/vidhika/_data/trackeval_data          # gt/ + trackers/ in TrackEval layout
+  trackeval:    /home/arnav/vidhika/vidhika/_data/trackeval/te
+  detections:   outputs/dets/{seq}.jsonl   # cached detector output
+  tracks:       outputs/tracks/{run}/{seq}.txt
+  homography:   configs/homography/{seq}.json
+  traces:       outputs/traces/{run}/{seq}.npz
+  figures:      outputs/figures
+
+detector:
+  weights: yolo26n.pt
+  imgsz: 1024
+  conf: 0.10          # keep LOW: the tracker does the filtering (two-stage association)
+  iou: 0.65           # NMS IoU
+  classes: [0]        # 0=person. Add 32 (sports ball) only if you track the ball too.
+  device: 0
+  half: true
+  batch: 16
+
+tracker:
+  space: ground          # ground | image   <-- THE core ablation
+  cost: mahalanobis      # mahalanobis | iou
+  use_cmc: true          # camera motion compensation
+  use_color: true        # jersey-colour gate
+  two_stage: true        # ByteTrack-style second pass over low-confidence detections
+  high_thresh: 0.50      # ByteTrack-style: high-conf dets associate first
+  low_thresh: 0.10       # low-conf dets only rescue existing tracks
+  match_thresh: 9.49     # chi2 gate, 2 dof, p=0.99 -> 9.21; 0.99 w/ slack
+  iou_match_thresh: 0.30
+  color_gate: 0.45       # max Bhattacharyya distance to allow a match
+  max_age: 30            # frames a track survives unmatched
+  min_hits: 3            # frames before a track is confirmed/emitted
+  max_speed_mps: 11.0    # physical gate: no human runs faster than this
+
+kalman:
+  dt: null               # null -> 1/video_fps
+  # Process noise: acceleration on the ground plane, m/s^2.
+  # A sprinting human changes velocity ~3 m/s^2. THIS is why ground-plane is better:
+  # the number is physically meaningful instead of "pixels, idk".
+  accel_std: 3.0
+  # Measurement noise: how well we localise the player's feet, in metres.
+  meas_std: 0.35
+
+geometry:
+  ref_frame: 1           # frame the homography was calibrated on
+  court: basketball
+  variant: fiba
+
+eval:
+  metrics: [HOTA, CLEAR, Identity]   # HOTA, MOTA, IDF1, IDSW
+  benchmark: SportsMOT
+  split: val

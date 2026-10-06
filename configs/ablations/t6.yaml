@@ -1,0 +1,16 @@
+# T6 - the deliberate failure: ground plane with a STATIC calibration and no CMC.
+# The camera pans, H_ref goes stale, and the metric positions drift. This row exists
+# to show that the ground-plane win in T4 comes from H_t = H_ref @ W(t->ref) and not
+# from "metres are magic".
+_base: ../default.yaml
+run_name: t6_ground_static_nocmc
+tracker: {space: ground, cost: mahalanobis, use_cmc: false, use_color: false, two_stage: true}
+kalman:
+  # Swept on v_0kUtTtmLaJA_c004 exactly as the image rows were, and the best taken.
+  # accel_std has to be pushed to 40 m/s^2 - physically absurd for a human - before the
+  # ground-space filter is competitive. That is a finding, not a tuning detail: it says
+  # the foot-point measurement carries large errors that are NOT on the plane (a jumping
+  # player's box bottom is metres away from their feet), so the filter can only cope by
+  # becoming almost purely measurement-trusting.
+  accel_std: 40.0
+  meas_std: 0.35

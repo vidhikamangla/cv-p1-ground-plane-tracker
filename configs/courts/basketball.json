@@ -1,0 +1,41 @@
+{
+  "_comment": "World coordinates in metres, origin at the top-left court corner, x along the sideline, y across. FIBA is 28x15; NBA is 28.65x15.24. SportsMOT basketball is mostly NBA/FIBA broadcast - the choice shifts absolute speeds by <3%, which is well inside the foot-point localisation error, and it does not affect HOTA/IDF1 at all.",
+  "fiba": {
+    "length": 28.0, "width": 15.0,
+    "landmarks": {
+      "corner_tl":        [0.0,  0.0],
+      "corner_tr":        [28.0, 0.0],
+      "corner_br":        [28.0, 15.0],
+      "corner_bl":        [0.0,  15.0],
+      "midline_top":      [14.0, 0.0],
+      "midline_bottom":   [14.0, 15.0],
+      "lane_tl_near":     [0.0,  5.05],
+      "lane_bl_near":     [0.0,  9.95],
+      "lane_tr_far":      [28.0, 5.05],
+      "lane_br_far":      [28.0, 9.95],
+      "ft_line_near_top": [5.8,  5.05],
+      "ft_line_near_bot": [5.8,  9.95],
+      "ft_line_far_top":  [22.2, 5.05],
+      "ft_line_far_bot":  [22.2, 9.95]
+    }
+  },
+  "nba": {
+    "length": 28.65, "width": 15.24,
+    "landmarks": {
+      "corner_tl":        [0.0,   0.0],
+      "corner_tr":        [28.65, 0.0],
+      "corner_br":        [28.65, 15.24],
+      "corner_bl":        [0.0,   15.24],
+      "midline_top":      [14.325, 0.0],
+      "midline_bottom":   [14.325, 15.24],
+      "lane_tl_near":     [0.0,   5.18],
+      "lane_bl_near":     [0.0,   10.06],
+      "lane_tr_far":      [28.65, 5.18],
+      "lane_br_far":      [28.65, 10.06],
+      "ft_line_near_top": [5.79,  5.18],
+      "ft_line_near_bot": [5.79,  10.06],
+      "ft_line_far_top":  [22.86, 5.18],
+      "ft_line_far_bot":  [22.86, 10.06]
+    }
+  }
+}

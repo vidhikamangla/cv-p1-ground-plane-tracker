@@ -1,0 +1,18 @@
+# T8 = T4 with a CORRECT measurement model: per-detection R = J Rpx J^T, where J is
+# the homography Jacobian at that foot point. Detection noise is isotropic in pixels,
+# so in metres it is heteroscedastic - small near the camera, large far away. A single
+# isotropic R in metres (T4) is right at one depth in the frame and wrong everywhere
+# else, which is what the chi-square gate was choking on.
+_base: ../default.yaml
+run_name: t8_ground_maha_cmc_jacobianR
+tracker:
+  space: ground
+  cost: mahalanobis
+  use_cmc: true
+  use_color: false
+  two_stage: true
+  per_point_R: true
+  match_thresh: 25.0   # swept; the chi2 value 9.49 assumes Gaussian errors
+kalman:
+  accel_std: 3.0
+  meas_std_px: 8.0     # isotropic detection noise in PIXELS, propagated to metres

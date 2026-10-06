@@ -1,0 +1,22 @@
+# T9 = T6 + ADAPTIVE camera-motion compensation, and nothing else.
+#
+# T1 vs T0 showed CMC is worth +12.6 HOTA on the clip whose camera pans and COSTS 8.9 on
+# the clip whose camera is locked off: an ORB+RANSAC homography is never exactly the
+# identity, and that residual jitter is pure noise - harmless in pixels, amplified once
+# it passes through H_ref into metres. So measure the warp and only apply it when the
+# camera demonstrably moved. This row isolates that single change against T6.
+_base: ../default.yaml
+run_name: t9_ground_adaptive_cmc
+tracker:
+  space: ground
+  cost: mahalanobis
+  use_cmc: true
+  use_color: false
+  two_stage: true
+  cmc_min_shift_px: 50.0    # mean corner displacement below this -> treat as static.
+                            # Measured medians: clip A 500 px (real pan), B 29 px, C 7 px.
+                            # 50 px cleanly separates "the camera panned" from "the
+                            # estimator wobbled", which 2 px did not - see README.
+kalman:
+  accel_std: 40.0
+  meas_std: 0.35
